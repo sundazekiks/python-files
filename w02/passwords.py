@@ -4,7 +4,7 @@ def word_in_file(word, wordfile, topfile, case_sensitive=False):
     
     word_list = []
     top_list = []
-
+    deter = None
     
     with open(wordfile, "r") as word_file:
         
@@ -16,16 +16,15 @@ def word_in_file(word, wordfile, topfile, case_sensitive=False):
             
     # Check if the password is in the word list
     
-    if case_sensitive:
+    if not case_sensitive:
         if word in top_list:
-            print("Password is in the top passwords list.")
-            return True
-    elif not case_sensitive:
-        if word.lower() in word_list:
-            print("Password is in the word passwords list.")
-            return True
-    else:
-        return False
+            deter = True
+        elif word.lower() in top_list:
+            deter = True
+        else:
+            deter = False
+
+    return deter
 
 
 def word_has_characters(word, character_list):
@@ -43,7 +42,7 @@ def word_has_characters(word, character_list):
 
 
 
-def word_complexity(word):
+def word_complexity(word, passlength):
     
     complexity = 0
     
@@ -67,6 +66,8 @@ def word_complexity(word):
         complexity += 4
     elif check_lower and check_special:
         complexity += 3
+    elif passlength < 10 and check_lower or check_upper or check_digits or check_special:
+        complexity += 4
         
     return complexity
     
@@ -77,13 +78,17 @@ def  password_strength(word, min_length, strong_length):
     
     
     if passlength < min_length:
-        return 1
+        deter = word_complexity(word, passlength)
+        if deter < 4:
+            return 1
+        else:
+            return 5
     elif passlength == 10:
         return 2
     elif passlength > strong_length:
         return 6
     else:
-        check_complexity = word_complexity(word)
+        check_complexity = word_complexity(word, passlength)
         return check_complexity
 
             
