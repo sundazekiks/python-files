@@ -23,8 +23,7 @@ def main():
     pressure += loss
     loss = pressure_loss_from_fittings(velocity, quantity_angles)
     pressure += loss
-    loss = pressure_loss_from_pipe_reduction(diameter,
-            velocity, reynolds, HDPE_SDR11_INNER_DIAMETER)
+    loss = pressure_loss_from_pipe_reduction(diameter, velocity, reynolds, HDPE_SDR11_INNER_DIAMETER)
     pressure += loss
     diameter = HDPE_SDR11_INNER_DIAMETER
     friction = HDPE_SDR11_FRICTION_FACTOR
@@ -49,8 +48,9 @@ def pressure_loss_from_fittings(fluid_velocity, quantity_fittings):
     return -.04 * WATER_DENSITY * fluid_velocity * 2 * quantity_fittings / 2000
 
 def reynolds_number(hydraulic_diameter, fluid_velocity):
-      r = ( WATER_DENSITY * hydraulic_diameter * fluid_velocity) / 0.0010016
 
+    r = ( WATER_DENSITY * hydraulic_diameter * fluid_velocity) / 0.0010016
+    return r
 def pressure_loss_from_pipe_reduction(larger_diameter, fluid_velocity, reynolds_number, smaller_diameter):
     k=(.1 + (50 / reynolds_number)) * (((larger_diameter / smaller_diameter) ** 4) - 1)
     return (-k * WATER_DENSITY * (fluid_velocity ** 2)) / 2000
